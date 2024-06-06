@@ -1,0 +1,28 @@
+﻿<div>
+    <table>
+        <thead>
+            <tr class="border-bottom">
+                <th class="text-center">Id</th>
+                <th class="text-center">Title</th>
+                <th class="text-center">Content</th>
+                <th class="text-center">Teaser</th>
+                <th class="text-center">ViewCount</th>
+                <th class="text-center">CateId</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var post in Model)
+            {
+                <tr>
+                    <td class="border text-center">@post.Id</td>
+                    <td class="border text-left">@post.Title</td>
+                    <td class="border text-left">@post.Content</td>
+                    <td class="border text-left">@post.Teaser</td>
+                    <td class="border text-center">@post.ViewCount</td>
+                    <td class="border text-center">@post.CateId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
