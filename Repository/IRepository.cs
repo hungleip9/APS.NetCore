@@ -7,7 +7,7 @@ namespace ASPNetCore
         Task Add(T entity);
         bool Exist(int id);
         Task Update(T entity);
-        void Remove(int id);
+        Task Remove(T entity);
         Task<T> FindById(int id);
         Task<List<T>> GetAll();
     }

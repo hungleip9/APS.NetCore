@@ -6,16 +6,23 @@ namespace ASPNetCore.Controllers
 {
     public class HomeController : Controller
     {
-        private IPostRepository postRepo;
+        private UnitOfWork unitOfWork;
 
-        public HomeController(IPostRepository _postRepo)
+        public HomeController(NewDbContext context)
         {
-            this.postRepo = _postRepo;
+            this.unitOfWork = new UnitOfWork(context);
         }
         public async Task<IActionResult> Index()
         {
-           List<Post> posts = await postRepo.GetAll();
+           List<Post> posts = await unitOfWork.PostReponsitory.GetAll();
             return View(posts);
+        }
+        [Route("post/{slug}-{id:int}")]
+
+        public async Task<ViewResult> ViewPost(int id)
+        {
+            var data = await unitOfWork.PostReponsitory.FindById(id);
+            return View(data);
         }
 
         public IActionResult Privacy()

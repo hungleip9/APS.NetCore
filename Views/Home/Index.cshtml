@@ -13,8 +13,10 @@
         <tbody>
             @foreach(var post in Model)
             {
-                <tr>
-                    <td class="border text-center">@post.Id</td>
+                <tr >
+                    <td class="border text-center">
+                        <a href="/post/abc-xyz-@post.Id">@post.Id</a>
+                    </td>
                     <td class="border text-left">@post.Title</td>
                     <td class="border text-left">@post.Content</td>
                     <td class="border text-left">@post.Teaser</td>

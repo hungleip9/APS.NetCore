@@ -5,6 +5,8 @@ namespace ASPNetCore.Models;
 
 public partial class Post
 {
+    public int Id { get; set; }
+
     public string? Title { get; set; }
 
     public string? Content { get; set; }
@@ -12,8 +14,6 @@ public partial class Post
     public string? Teaser { get; set; }
 
     public string? ViewCount { get; set; }
-
-    public int Id { get; set; }
 
     public int? CateId { get; set; }
 

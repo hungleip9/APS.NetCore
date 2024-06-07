@@ -11,20 +11,20 @@ namespace ASPNetCore.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly CateRepository _context;
+        private readonly CateRepository _cateRepo;
 
         public CategoriesController(NewDbContext context)
         {
-            _context = new CateRepository(context);
+            this._cateRepo = new CateRepository(context);
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.GetAll());
+            return View(await _cateRepo.GetAll());
         }
 
-        // GET: Categories/Details/5
+        //GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,7 +32,7 @@ namespace ASPNetCore.Controllers
                 return NotFound();
             }
 
-            var category = await _context.FindById(id.Value);
+            var category = await _cateRepo.FindById(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -56,7 +56,7 @@ namespace ASPNetCore.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                _cateRepo.Add(category);
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -70,7 +70,7 @@ namespace ASPNetCore.Controllers
                 return NotFound();
             }
 
-            var category = await _context.FindById(id.Value);
+            var category = await _cateRepo.FindById(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -94,7 +94,7 @@ namespace ASPNetCore.Controllers
             {
                 try
                 {
-                    await _context.Update(category);
+                    await _cateRepo.Update(category);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -120,7 +120,7 @@ namespace ASPNetCore.Controllers
                 return NotFound();
             }
 
-            var category = await _context.FindById(id.Value);
+            var category = await _cateRepo.FindById(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -134,13 +134,14 @@ namespace ASPNetCore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _context.Remove(id);
+            var category = await _cateRepo.FindById(id);
+            _cateRepo.Remove(category);
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryExists(int id)
         {
-            return _context.Exist(id);
+            return _cateRepo.Exist(id);
         }
     }
 }

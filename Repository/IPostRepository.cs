@@ -1,5 +1,6 @@
 ﻿using ASPNetCore.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace ASPNetCore
 {
@@ -8,13 +9,14 @@ namespace ASPNetCore
         Task Add(Post post);
         bool Exist(int id);
         Task Update(Post post);
-        void Remove(int id);
+        Task Remove(Post post);
         Task<Post> FindById(int id);
         Task<List<Post>> GetAll();
     }
     public class PostReponsitory : IPostRepository
     {
         private NewDbContext context;
+
         public PostReponsitory (NewDbContext _context)
         {
             this.context = _context;
@@ -43,9 +45,8 @@ namespace ASPNetCore
             return await context.Posts.ToListAsync();
         }
 
-        public async void Remove(int id)
+        public async Task Remove(Post post)
         {
-            Post post = await context.Posts.FindAsync(id);
             context.Posts.Remove(post);
             await context.SaveChangesAsync();
         }

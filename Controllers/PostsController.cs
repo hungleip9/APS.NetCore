@@ -6,23 +6,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASPNetCore.Models;
+using Microsoft.Extensions.Hosting;
 
 namespace ASPNetCore.Controllers
 {
     public class PostsController : Controller
     {
         private readonly NewDbContext _context;
+        private UnitOfWork unitOfWork;
 
         public PostsController(NewDbContext context)
         {
             _context = context;
+            this.unitOfWork = new UnitOfWork(context);
         }
 
         // GET: Posts
         public async Task<IActionResult> Index()
         {
-            var newDbContext = _context.Posts.Include(p => p.Cate);
-            return View(await newDbContext.ToListAsync());
+            var Posts = await unitOfWork.PostReponsitory.GetAll();
+            return View(Posts);
         }
 
         // GET: Posts/Details/5
@@ -50,18 +53,13 @@ namespace ASPNetCore.Controllers
             ViewData["CateId"] = new SelectList(_context.Categories, "Id", "Id");
             return View();
         }
-
-        // POST: Posts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,Content,Teaser,ViewCount,Id,CateId")] Post post)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(post);
-                await _context.SaveChangesAsync();
+                unitOfWork.PostReponsitory.Add(post);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CateId"] = new SelectList(_context.Categories, "Id", "Id", post.CateId);
@@ -146,12 +144,7 @@ namespace ASPNetCore.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var post = await _context.Posts.FindAsync(id);
-            if (post != null)
-            {
-                _context.Posts.Remove(post);
-            }
-
-            await _context.SaveChangesAsync();
+            unitOfWork.PostReponsitory.Remove(post);
             return RedirectToAction(nameof(Index));
         }
 

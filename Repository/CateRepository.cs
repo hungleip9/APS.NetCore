@@ -1,5 +1,6 @@
 ﻿using ASPNetCore.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace ASPNetCore
 {
@@ -18,12 +19,15 @@ namespace ASPNetCore
 
         public bool Exist(int id)
         {
-            throw new NotImplementedException();
+            Category entity = context.Categories.Find(id);
+            if (entity != null) return true;
+            return false;
         }
 
-        public Task<Category> FindById(int id)
+        public async Task<Category> FindById(int id)
         {
-            throw new NotImplementedException();
+            Category entity = await context.Categories.FindAsync(id);
+            return entity;
         }
 
         public async Task<List<Category>> GetAll()
@@ -31,14 +35,18 @@ namespace ASPNetCore
             return await context.Categories.ToListAsync();
         }
 
-        public void Remove(int id)
+        public async Task Remove(Category entity)
         {
-            throw new NotImplementedException();
+            //Console.WriteLine($"category: {entity.CategoryName}");
+            context.Categories.Remove(entity);
+            await context.SaveChangesAsync();
         }
 
-        public Task Update(Category entity)
+        public async Task Update(Category entity)
         {
-            throw new NotImplementedException();
+            Category newdata = await context.Categories.FindAsync(entity.Id);
+            newdata = entity;
+            await context.SaveChangesAsync();
         }
     }
 }

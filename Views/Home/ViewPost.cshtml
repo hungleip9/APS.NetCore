@@ -1,0 +1,9 @@
+﻿@model Post
+@{
+    ViewData["Title"] = Model.Title;
+}
+<h2>@Model.Title</h2>
+<p style="color: darkgray;font-size: 14px">@Model.Teaser</p>
+<div>
+    @Model.Content
+</div>
